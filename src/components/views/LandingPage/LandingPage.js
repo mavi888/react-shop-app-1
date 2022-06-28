@@ -63,7 +63,7 @@ function LandingPage() {
 			filters: Filters,
 			searchTerm: SearchTerms,
 		};
-		getProducts(variables);
+		getProductsFromServer(variables);
 		setSkip(skip);
 	};
 
@@ -94,7 +94,7 @@ function LandingPage() {
 			limit: Limit,
 			filters: filters,
 		};
-		getProducts(variables);
+		getProductsFromServer(variables);
 		setSkip(0);
 	};
 
@@ -113,14 +113,13 @@ function LandingPage() {
 
 	const handleFilters = (filters, category) => {
 		const newFilters = { ...Filters };
+
 		newFilters[category] = filters;
 
 		if (category === 'price') {
 			let priceValues = handlePrice(filters);
 			newFilters[category] = priceValues;
 		}
-
-		console.log(newFilters);
 
 		showFilteredResults(newFilters);
 		setFilters(newFilters);
@@ -137,7 +136,7 @@ function LandingPage() {
 		setSkip(0);
 		setSearchTerms(newSearchTerm);
 
-		getProducts(variables);
+		getProductsFromServer(variables);
 	};
 
 	return (

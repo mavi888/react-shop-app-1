@@ -289,7 +289,6 @@ export function getProducts(variables) {
 	const request = axios
 		.post(`${SERVER_URL}${PRODUCT_SERVER}/getProducts`, variables)
 		.then((response) => {
-			console.log(response);
 			return response.data;
 		});
 
