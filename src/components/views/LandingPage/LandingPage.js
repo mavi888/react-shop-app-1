@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Col, Card, Row } from 'antd';
 import { RocketOutlined } from '@ant-design/icons';
 
-import ImageSlider from '../../utils/ImageSlider';
 import CheckBox from './Sections/CheckBox';
 import RadioBox from './Sections/RadioBox';
 import { category, price } from './Sections/Datas';
@@ -11,7 +10,7 @@ import SearchFeature from './Sections/SearchFeature';
 import { getProducts } from '../../../_actions/user_actions';
 import { useDispatch } from 'react-redux';
 
-import S3Image from '../../utils/S3Image';
+import CloudFrontImage from '../../utils/CloudFrontImage';
 
 const { Meta } = Card;
 
@@ -75,9 +74,9 @@ function LandingPage() {
 					hoverable={true}
 					cover={
 						<a href={`/product/${product._id}`}>
-							<S3Image
+							<CloudFrontImage
 								image={product.images[0]}
-								style={{ '--width': '200px', '--height': '140px' }}
+								style={{ width: '240px' }}
 								alt={`productImg-${index}`}
 							/>
 						</a>

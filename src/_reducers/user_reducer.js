@@ -14,7 +14,6 @@ import {
 	GET_PRODUCT_BY_ID,
 	GET_HISTORY,
 	GET_PRODUCTS,
-	GET_PRODUCT_IMAGE,
 } from '../_actions/types';
 
 export default function (state = {}, action) {
@@ -115,12 +114,6 @@ export default function (state = {}, action) {
 			return {
 				...state,
 				product: action.payload,
-			};
-
-		case GET_PRODUCT_IMAGE:
-			return {
-				...state,
-				image: action.payload,
 			};
 
 		default:

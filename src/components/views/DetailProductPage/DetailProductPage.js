@@ -7,9 +7,9 @@ import {
 	addToCart,
 	getProductById,
 	isUserAuth,
-	getProductImage,
 } from '../../../_actions/user_actions';
 import { useDispatch } from 'react-redux';
+import { IMAGE_PATH } from '../../Config';
 
 function DetailProductPage(props) {
 	const dispatch = useDispatch();
@@ -27,14 +27,14 @@ function DetailProductPage(props) {
 			if (productImages && productImages.length > 0) {
 				productImages &&
 					productImages.map((item) => {
-						dispatch(getProductImage(item)).then((res) => {
-							const img = {
-								original: res.payload,
-								thumbnail: res.payload,
-							};
+						const imageURL = `https://${process.env.REACT_APP_DISTRIBUTION_NAME}${IMAGE_PATH}${item}`;
 
-							setImages([...Images, img]);
-						});
+						const img = {
+							original: imageURL,
+							thumbnail: imageURL,
+						};
+
+						setImages([...Images, img]);
 					});
 			}
 		});

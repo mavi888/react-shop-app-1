@@ -15,7 +15,6 @@ import {
 	GET_PRODUCT_BY_ID,
 	GET_HISTORY,
 	GET_PRODUCTS,
-	GET_PRODUCT_IMAGE,
 } from './types';
 
 import {
@@ -263,21 +262,6 @@ export function getProductById(productId) {
 
 	return {
 		type: GET_PRODUCT_BY_ID,
-		payload: request,
-	};
-}
-
-export function getProductImage(imageKey) {
-	const request = Storage.get(imageKey)
-		.then((url) => {
-			return url;
-		})
-		.catch((err) => {
-			console.log(err);
-		});
-
-	return {
-		type: GET_PRODUCT_IMAGE,
 		payload: request,
 	};
 }

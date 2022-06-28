@@ -3,7 +3,7 @@ import Dropzone from 'react-dropzone';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { uploadImage } from '../../_actions/user_actions';
-import S3Image from './S3Image';
+import CloudFrontImage from './CloudFrontImage';
 
 function FileUpload(props) {
 	const dispatch = useDispatch();
@@ -66,9 +66,9 @@ function FileUpload(props) {
 			>
 				{Images.map((image, index) => (
 					<div onClick={() => onDelete(image)}>
-						<S3Image
+						<CloudFrontImage
 							image={image}
-							style={{ '--width': '300px', '--height': '240px' }}
+							style={{ width: '300px' }}
 							alt={`productImg-${index}`}
 						/>
 					</div>
