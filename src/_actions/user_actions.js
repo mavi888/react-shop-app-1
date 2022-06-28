@@ -16,6 +16,7 @@ import {
 } from './types';
 
 import {
+	SERVER_URL,
 	USER_SERVER,
 	STORE_SERVER,
 	PRODUCT_SERVER,
@@ -23,7 +24,7 @@ import {
 
 export function registerUser(dataToSubmit) {
 	const request = axios
-		.post(`${USER_SERVER}/register`, dataToSubmit)
+		.post(`${SERVER_URL}${USER_SERVER}/register`, dataToSubmit)
 		.then((response) => response.data);
 
 	return {
@@ -34,7 +35,7 @@ export function registerUser(dataToSubmit) {
 
 export function loginUser(dataToSubmit) {
 	const request = axios
-		.post(`${USER_SERVER}/login`, dataToSubmit)
+		.post(`${SERVER_URL}${USER_SERVER}/login`, dataToSubmit)
 		.then((response) => response.data);
 
 	return {
@@ -45,7 +46,7 @@ export function loginUser(dataToSubmit) {
 
 export function auth() {
 	const request = axios
-		.get(`${USER_SERVER}/auth`)
+		.get(`${SERVER_URL}${USER_SERVER}/auth`)
 		.then((response) => response.data);
 
 	return {
@@ -56,7 +57,7 @@ export function auth() {
 
 export function logoutUser() {
 	const request = axios
-		.get(`${USER_SERVER}/logout`)
+		.get(`${SERVER_URL}${USER_SERVER}/logout`)
 		.then((response) => response.data);
 
 	return {
@@ -67,7 +68,7 @@ export function logoutUser() {
 
 export function addToCart(_id) {
 	const request = axios
-		.get(`${STORE_SERVER}/addToCart?productId=${_id}`)
+		.get(`${SERVER_URL}${STORE_SERVER}/addToCart?productId=${_id}`)
 		.then((response) => response.data);
 
 	return {
@@ -78,7 +79,9 @@ export function addToCart(_id) {
 
 export function getCartItems(cartItems, userCart) {
 	const request = axios
-		.get(`${PRODUCT_SERVER}/products_by_id?id=${cartItems}&type=array`)
+		.get(
+			`${SERVER_URL}${PRODUCT_SERVER}/products_by_id?id=${cartItems}&type=array`
+		)
 		.then((response) => {
 			//Make CartDetail inside Redux Store
 			// We need to add quantity data to Product Information that come from Product Collection.
@@ -102,7 +105,7 @@ export function getCartItems(cartItems, userCart) {
 
 export function removeCartItem(id) {
 	const request = axios
-		.get(`${STORE_SERVER}/removeFromCart?_id=${id}`)
+		.get(`${SERVER_URL}${STORE_SERVER}/removeFromCart?_id=${id}`)
 		.then((response) => {
 			response.data.cart.forEach((item) => {
 				response.data.cartDetail.forEach((k, i) => {
@@ -125,7 +128,7 @@ export function removeCartItem(id) {
 
 export function onSuccessBuy(data) {
 	const request = axios
-		.post(`${STORE_SERVER}/successBuy`, data)
+		.post(`${SERVER_URL}${STORE_SERVER}/successBuy`, data)
 		.then((response) => response.data);
 
 	return {
@@ -136,7 +139,7 @@ export function onSuccessBuy(data) {
 
 export function uploadImage(formData, config) {
 	const request = axios
-		.post(`${PRODUCT_SERVER}/uploadImage`, formData, config)
+		.post(`${SERVER_URL}${PRODUCT_SERVER}/uploadImage`, formData, config)
 		.then((response) => {
 			return response.data;
 		});
@@ -149,7 +152,7 @@ export function uploadImage(formData, config) {
 
 export function uploadProduct(productDetail) {
 	const request = axios
-		.post(`${PRODUCT_SERVER}/uploadProduct`, productDetail)
+		.post(`${SERVER_URL}${PRODUCT_SERVER}/uploadProduct`, productDetail)
 		.then((response) => {
 			return response.data;
 		});
@@ -162,7 +165,9 @@ export function uploadProduct(productDetail) {
 
 export function getProductById(productId) {
 	const request = axios
-		.get(`${PRODUCT_SERVER}/products_by_id?id=${productId}&type=single`)
+		.get(
+			`${SERVER_URL}${PRODUCT_SERVER}/products_by_id?id=${productId}&type=single`
+		)
 		.then((response) => {
 			return response;
 		});
@@ -174,9 +179,11 @@ export function getProductById(productId) {
 }
 
 export function getHistory() {
-	const request = axios.get(`${STORE_SERVER}/getHistory`).then((response) => {
-		return response;
-	});
+	const request = axios
+		.get(`${SERVER_URL}${STORE_SERVER}/getHistory`)
+		.then((response) => {
+			return response;
+		});
 
 	return {
 		type: GET_HISTORY,
@@ -186,7 +193,7 @@ export function getHistory() {
 
 export function getProducts(variables) {
 	const request = axios
-		.post(`${PRODUCT_SERVER}/getProducts`, variables)
+		.post(`${SERVER_URL}${PRODUCT_SERVER}/getProducts`, variables)
 		.then((response) => {
 			console.log(response);
 			return response.data;
