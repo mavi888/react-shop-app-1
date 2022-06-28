@@ -3,6 +3,7 @@ import {
 	REGISTER_USER,
 	CONFIRM_USER,
 	AUTH_USER,
+	IS_USER_AUTH,
 	LOGOUT_USER,
 	ADD_TO_CART_USER,
 	GET_CART_ITEMS_USER,
@@ -39,6 +40,11 @@ export default function (state = {}, action) {
 			return {
 				...state,
 				userData: action.payload,
+			};
+
+		case IS_USER_AUTH:
+			return {
+				...state,
 			};
 
 		case LOGOUT_USER:

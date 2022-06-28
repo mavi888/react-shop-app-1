@@ -4,6 +4,7 @@ import {
 	REGISTER_USER,
 	CONFIRM_USER,
 	AUTH_USER,
+	IS_USER_AUTH,
 	LOGOUT_USER,
 	ADD_TO_CART_USER,
 	GET_CART_ITEMS_USER,
@@ -100,6 +101,21 @@ export function auth() {
 	};
 }
 
+export function isUserAuth() {
+	const request = Auth.currentSession()
+		.then((res) => {
+			return true;
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	return {
+		type: IS_USER_AUTH,
+		payload: request,
+	};
+}
+
 export function logoutUser() {
 	const request = Auth.signOut().then(() => {
 		return {
@@ -114,9 +130,13 @@ export function logoutUser() {
 }
 
 export function addToCart(_id) {
-	const request = axios
-		.get(`${SERVER_URL}${STORE_SERVER}/addToCart?productId=${_id}`)
-		.then((response) => response.data);
+	const request = getAuthorizationHeader().then((config) => {
+		return axios
+			.get(`${SERVER_URL}${STORE_SERVER}/addToCart?productId=${_id}`, config)
+			.then((response) => {
+				return response.data;
+			});
+	});
 
 	return {
 		type: ADD_TO_CART_USER,
@@ -151,21 +171,23 @@ export function getCartItems(cartItems, userCart) {
 }
 
 export function removeCartItem(id) {
-	const request = axios
-		.get(`${SERVER_URL}${STORE_SERVER}/removeFromCart?_id=${id}`)
-		.then((response) => {
-			response.data.cart.forEach((item) => {
-				response.data.cartDetail.forEach((k, i) => {
-					if (item.id === k._id) {
-						response.data.cartDetail[i].quantity = item.quantity;
-					}
+	const request = getAuthorizationHeader().then((config) => {
+		return axios
+			.get(`${SERVER_URL}${STORE_SERVER}/removeFromCart?_id=${id}`, config)
+			.then((response) => {
+				response.data.cart.forEach((item) => {
+					response.data.cartDetail.forEach((k, i) => {
+						if (item.id === k._id) {
+							response.data.cartDetail[i].quantity = item.quantity;
+						}
+					});
 				});
+				return response.data;
+			})
+			.catch((e) => {
+				alert('Error removing item from cart');
 			});
-			return response.data;
-		})
-		.catch((e) => {
-			alert('Error removing item from cart');
-		});
+	});
 
 	return {
 		type: REMOVE_CART_ITEM_USER,
@@ -174,9 +196,11 @@ export function removeCartItem(id) {
 }
 
 export function onSuccessBuy(data) {
-	const request = axios
-		.post(`${SERVER_URL}${STORE_SERVER}/successBuy`, data)
-		.then((response) => response.data);
+	const request = getAuthorizationHeader().then((config) => {
+		return axios
+			.post(`${SERVER_URL}${STORE_SERVER}/successBuy`, data, config)
+			.then((response) => response.data);
+	});
 
 	return {
 		type: ON_SUCCESS_BUY_USER,
@@ -198,11 +222,23 @@ export function uploadImage(formData, config) {
 }
 
 export function uploadProduct(productDetail) {
-	const request = axios
-		.post(`${SERVER_URL}${PRODUCT_SERVER}/uploadProduct`, productDetail)
-		.then((response) => {
-			return response.data;
-		});
+	const request = getAuthorizationHeader().then((config) => {
+		return axios
+			.post(
+				`${SERVER_URL}${PRODUCT_SERVER}/uploadProduct`,
+				productDetail,
+				config
+			)
+			.then((response) => {
+				if (response.data.success) {
+					return {
+						success: true,
+					};
+				} else {
+					throw new Error('Failed to upload product');
+				}
+			});
+	});
 
 	return {
 		type: PRODUCT_UPLOAD,
@@ -226,11 +262,17 @@ export function getProductById(productId) {
 }
 
 export function getHistory() {
-	const request = axios
-		.get(`${SERVER_URL}${STORE_SERVER}/getHistory`)
-		.then((response) => {
-			return response;
-		});
+	const request = getAuthorizationHeader().then((config) => {
+		return axios
+			.get(`${SERVER_URL}${STORE_SERVER}/getHistory`, config)
+			.then((response) => {
+				if (response.data.success) {
+					return response.data.history;
+				} else {
+					throw new Error('Failed to get user history');
+				}
+			});
+	});
 
 	return {
 		type: GET_HISTORY,

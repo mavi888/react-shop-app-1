@@ -9,14 +9,14 @@ function HistoryPage() {
 	const [History, setHistory] = useState([]);
 
 	useEffect(() => {
-		dispatch(getHistory()).then((response) => {
-			if (response.payload.data.success) {
-				const history = response.payload.data.history;
+		dispatch(getHistory())
+			.then((response) => {
+				const history = response.payload;
 				setHistory(history);
-			} else {
-				alert('Failed to get History');
-			}
-		});
+			})
+			.catch((err) => {
+				alert(err);
+			});
 	}, []);
 
 	const formatTime = (time) => {

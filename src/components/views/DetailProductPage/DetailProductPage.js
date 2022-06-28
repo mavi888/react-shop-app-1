@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Row, Col } from 'antd';
 import ProductImage from './Sections/ProductImage';
 import ProductInfo from './Sections/ProductInfo';
-import { addToCart, getProductById } from '../../../_actions/user_actions';
+import {
+	addToCart,
+	getProductById,
+	isUserAuth,
+} from '../../../_actions/user_actions';
 import { useDispatch } from 'react-redux';
 
 function DetailProductPage(props) {
@@ -10,10 +14,19 @@ function DetailProductPage(props) {
 
 	const productId = props.match.params.productId;
 	const [Product, setProduct] = useState([]);
+	const [UserAuth, setUserAuth] = useState(false);
 
 	useEffect(() => {
 		dispatch(getProductById(productId)).then((response) => {
 			setProduct(response.payload.data[0]);
+		});
+
+		dispatch(isUserAuth()).then((response) => {
+			if (response.payload === undefined) {
+				setUserAuth(false);
+			} else {
+				setUserAuth(true);
+			}
 		});
 	}, []);
 
@@ -34,7 +47,11 @@ function DetailProductPage(props) {
 					<ProductImage detail={Product} />
 				</Col>
 				<Col lg={12} xs={24}>
-					<ProductInfo addToCart={addToCartHandler} detail={Product} />
+					<ProductInfo
+						addToCart={addToCartHandler}
+						detail={Product}
+						isUserAuth={UserAuth}
+					/>
 				</Col>
 			</Row>
 		</div>
