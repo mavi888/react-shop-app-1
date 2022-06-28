@@ -11,6 +11,7 @@ frontend:
         - echo "REACT_APP_IDENTITY_POOL_ID=$IDENTITY_POOL_ID" >> .env
         - echo "REACT_APP_USER_POOL_CLIENT_ID=$USER_POOL_CLIENT_ID" >> .env
         - echo "REACT_APP_USER_POOL_ID=$USER_POOL_ID" >> .env
+        - echo "REACT_APP_BUCKET_NAME=$BUCKET_NAME" >> .env
         - npm run build
   artifacts:
     baseDirectory: build

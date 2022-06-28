@@ -15,6 +15,7 @@ import {
 	GET_PRODUCT_BY_ID,
 	GET_HISTORY,
 	GET_PRODUCTS,
+	GET_PRODUCT_IMAGE,
 } from './types';
 
 import {
@@ -24,7 +25,7 @@ import {
 	PRODUCT_SERVER,
 } from '../components/Config.js';
 
-import { Amplify, Auth } from 'aws-amplify';
+import { Amplify, Auth, Storage } from 'aws-amplify';
 
 import awsExports from './aws-config';
 
@@ -208,12 +209,17 @@ export function onSuccessBuy(data) {
 	};
 }
 
-export function uploadImage(formData, config) {
-	const request = axios
-		.post(`${SERVER_URL}${PRODUCT_SERVER}/uploadImage`, formData, config)
-		.then((response) => {
-			return response.data;
-		});
+export function uploadImage(file) {
+	const fileName = `uploads/${file.name}`;
+
+	const request = Storage.put(fileName, file).then((result) => {
+		console.log(result);
+
+		return {
+			image: fileName,
+			success: true,
+		};
+	});
 
 	return {
 		type: IMAGE_UPLOAD,
@@ -252,11 +258,26 @@ export function getProductById(productId) {
 			`${SERVER_URL}${PRODUCT_SERVER}/products_by_id?id=${productId}&type=single`
 		)
 		.then((response) => {
-			return response;
+			return response.data[0];
 		});
 
 	return {
 		type: GET_PRODUCT_BY_ID,
+		payload: request,
+	};
+}
+
+export function getProductImage(imageKey) {
+	const request = Storage.get(imageKey)
+		.then((url) => {
+			return url;
+		})
+		.catch((err) => {
+			console.log(err);
+		});
+
+	return {
+		type: GET_PRODUCT_IMAGE,
 		payload: request,
 	};
 }

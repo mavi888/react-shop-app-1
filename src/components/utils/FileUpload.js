@@ -3,6 +3,7 @@ import Dropzone from 'react-dropzone';
 import { PlusCircleOutlined } from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 import { uploadImage } from '../../_actions/user_actions';
+import S3Image from './S3Image';
 
 function FileUpload(props) {
 	const dispatch = useDispatch();
@@ -11,13 +12,7 @@ function FileUpload(props) {
 	const URL = process.env.REACT_APP_SERVER_URL;
 
 	const onDrop = (files) => {
-		let formData = new FormData();
-		const config = {
-			header: { 'content-type': 'multipart/form-data' },
-		};
-		formData.append('file', files[0]);
-
-		dispatch(uploadImage(formData, config)).then((response) => {
+		dispatch(uploadImage(files[0])).then((response) => {
 			if (response.payload.success) {
 				setImages([...Images, response.payload.image]);
 				props.refreshFunction([...Images, response.payload.image]);
@@ -71,10 +66,9 @@ function FileUpload(props) {
 			>
 				{Images.map((image, index) => (
 					<div onClick={() => onDelete(image)}>
-						{URL}
-						<img
-							style={{ minWidth: '300px', width: '300px', height: '240px' }}
-							src={`${URL}${image}`}
+						<S3Image
+							image={image}
+							style={{ '--width': '300px', '--height': '240px' }}
 							alt={`productImg-${index}`}
 						/>
 					</div>

@@ -11,6 +11,8 @@ import SearchFeature from './Sections/SearchFeature';
 import { getProducts } from '../../../_actions/user_actions';
 import { useDispatch } from 'react-redux';
 
+import S3Image from '../../utils/S3Image';
+
 const { Meta } = Card;
 
 function LandingPage() {
@@ -73,8 +75,11 @@ function LandingPage() {
 					hoverable={true}
 					cover={
 						<a href={`/product/${product._id}`}>
-							{' '}
-							<ImageSlider images={product.images} />
+							<S3Image
+								image={product.images[0]}
+								style={{ '--width': '200px', '--height': '140px' }}
+								alt={`productImg-${index}`}
+							/>
 						</a>
 					}
 				>

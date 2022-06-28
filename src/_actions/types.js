@@ -13,3 +13,4 @@ export const PRODUCT_UPLOAD = 'product_upload';
 export const GET_PRODUCT_BY_ID = 'get_product_by_id';
 export const GET_HISTORY = 'get_history';
 export const GET_PRODUCTS = 'get_products';
+export const GET_PRODUCT_IMAGE = 'get_product_image';
