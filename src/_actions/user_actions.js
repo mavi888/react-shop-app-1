@@ -2,6 +2,7 @@ import axios from 'axios';
 import {
 	LOGIN_USER,
 	REGISTER_USER,
+	CONFIRM_USER,
 	AUTH_USER,
 	LOGOUT_USER,
 	ADD_TO_CART_USER,
@@ -22,10 +23,28 @@ import {
 	PRODUCT_SERVER,
 } from '../components/Config.js';
 
+import { Amplify, Auth } from 'aws-amplify';
+
+import awsExports from './aws-config';
+
+Amplify.configure(awsExports);
+
 export function registerUser(dataToSubmit) {
-	const request = axios
-		.post(`${SERVER_URL}${USER_SERVER}/register`, dataToSubmit)
-		.then((response) => response.data);
+	const request = Auth.signUp({
+		username: dataToSubmit.email,
+		password: dataToSubmit.password,
+		attributes: {
+			email: dataToSubmit.email,
+			name: dataToSubmit.name,
+			family_name: dataToSubmit.lastname,
+		},
+	}).then((user) => {
+		axios.post(`${SERVER_URL}${USER_SERVER}/register`, dataToSubmit);
+
+		return {
+			success: true,
+		};
+	});
 
 	return {
 		type: REGISTER_USER,
@@ -33,10 +52,32 @@ export function registerUser(dataToSubmit) {
 	};
 }
 
+export function confirmNewUser(dataToSubmit) {
+	const request = Auth.confirmSignUp(
+		dataToSubmit.email,
+		dataToSubmit.code
+	).then((res) => {
+		return {
+			success: true,
+		};
+	});
+
+	return {
+		type: CONFIRM_USER,
+		payload: request,
+	};
+}
+
 export function loginUser(dataToSubmit) {
-	const request = axios
-		.post(`${SERVER_URL}${USER_SERVER}/login`, dataToSubmit)
-		.then((response) => response.data);
+	const request = Auth.signIn({
+		username: dataToSubmit.email,
+		password: dataToSubmit.password,
+	}).then((user) => {
+		return {
+			loginSuccess: true,
+			userId: user.username,
+		};
+	});
 
 	return {
 		type: LOGIN_USER,
@@ -45,9 +86,13 @@ export function loginUser(dataToSubmit) {
 }
 
 export function auth() {
-	const request = axios
-		.get(`${SERVER_URL}${USER_SERVER}/auth`)
-		.then((response) => response.data);
+	const request = getAuthorizationHeader().then((config) => {
+		return axios
+			.get(`${SERVER_URL}${USER_SERVER}/auth`, config)
+			.then((response) => {
+				return response.data;
+			});
+	});
 
 	return {
 		type: AUTH_USER,
@@ -56,9 +101,11 @@ export function auth() {
 }
 
 export function logoutUser() {
-	const request = axios
-		.get(`${SERVER_URL}${USER_SERVER}/logout`)
-		.then((response) => response.data);
+	const request = Auth.signOut().then(() => {
+		return {
+			success: true,
+		};
+	});
 
 	return {
 		type: LOGOUT_USER,
@@ -203,4 +250,17 @@ export function getProducts(variables) {
 		type: GET_PRODUCTS,
 		payload: request,
 	};
+}
+
+function getAuthorizationHeader() {
+	return Auth.currentSession().then((res) => {
+		const token = res.getAccessToken();
+		const jwtToken = token.getJwtToken();
+
+		const config = {
+			headers: { Authorization: `Bearer ${jwtToken}` },
+		};
+
+		return config;
+	});
 }

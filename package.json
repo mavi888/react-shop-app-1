@@ -5,6 +5,7 @@
   "license": "MIT",
   "dependencies": {
     "antd": "^4.20.5",
+    "aws-amplify": "^4.3.26",
     "axios": "^0.27.2",
     "formik": "^2.2.9",
     "moment": "^2.29.3",
@@ -23,7 +24,8 @@
     "socket.io-client": "^4.5.1",
     "stream": "^0.0.2",
     "util": "^0.12.4",
-    "yup": "^0.32.11"
+    "yup": "^0.32.11",
+    "yup-password": "^0.2.2"
   },
   "scripts": {
     "start": "react-scripts start",

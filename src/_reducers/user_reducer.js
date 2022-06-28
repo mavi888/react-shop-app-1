@@ -1,6 +1,7 @@
 import {
 	LOGIN_USER,
 	REGISTER_USER,
+	CONFIRM_USER,
 	AUTH_USER,
 	LOGOUT_USER,
 	ADD_TO_CART_USER,
@@ -20,6 +21,12 @@ export default function (state = {}, action) {
 			return {
 				...state,
 				register: action.payload,
+			};
+
+		case CONFIRM_USER:
+			return {
+				...state,
+				confirm: action.payload,
 			};
 
 		case LOGIN_USER:
