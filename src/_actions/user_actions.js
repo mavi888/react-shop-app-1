@@ -144,28 +144,41 @@ export function addToCart(_id) {
 	};
 }
 
-export function getCartItems(cartItems, userCart) {
-	const request = axios
-		.get(
-			`${SERVER_URL}${PRODUCT_SERVER}/products_by_id?id=${cartItems}&type=array`
-		)
-		.then((response) => {
-			//Make CartDetail inside Redux Store
-			// We need to add quantity data to Product Information that come from Product Collection.
-
-			userCart.forEach((cartItem) => {
-				response.data.forEach((productDetail, i) => {
-					if (cartItem.id === productDetail._id) {
-						response.data[i].quantity = cartItem.quantity;
-					}
-				});
+export function getUserCart() {
+	const request = getAuthorizationHeader().then((config) => {
+		return axios
+			.get(`${SERVER_URL}${STORE_SERVER}/userCartInfo`, config)
+			.then((response) => {
+				if (response.data.success) {
+					const cartDetail = response.data.cartDetail;
+					return cartDetail;
+				} else {
+					throw new Error('Failed to get user cart');
+				}
 			});
-
-			return response.data;
-		});
+	});
 
 	return {
 		type: GET_CART_ITEMS_USER,
+		payload: request,
+	};
+}
+
+export function getHistory() {
+	const request = getAuthorizationHeader().then((config) => {
+		return axios
+			.get(`${SERVER_URL}${STORE_SERVER}/getHistory`, config)
+			.then((response) => {
+				if (response.data.success) {
+					return response.data.history;
+				} else {
+					throw new Error('Failed to get user history');
+				}
+			});
+	});
+
+	return {
+		type: GET_HISTORY,
 		payload: request,
 	};
 }
@@ -175,13 +188,6 @@ export function removeCartItem(id) {
 		return axios
 			.get(`${SERVER_URL}${STORE_SERVER}/removeFromCart?_id=${id}`, config)
 			.then((response) => {
-				response.data.cart.forEach((item) => {
-					response.data.cartDetail.forEach((k, i) => {
-						if (item.id === k._id) {
-							response.data.cartDetail[i].quantity = item.quantity;
-						}
-					});
-				});
 				return response.data;
 			})
 			.catch((e) => {
@@ -212,8 +218,6 @@ export function uploadImage(file) {
 	const fileName = `uploads/${file.name}`;
 
 	const request = Storage.put(fileName, file).then((result) => {
-		console.log(result);
-
 		return {
 			image: fileName,
 			success: true,
@@ -262,25 +266,6 @@ export function getProductById(productId) {
 
 	return {
 		type: GET_PRODUCT_BY_ID,
-		payload: request,
-	};
-}
-
-export function getHistory() {
-	const request = getAuthorizationHeader().then((config) => {
-		return axios
-			.get(`${SERVER_URL}${STORE_SERVER}/getHistory`, config)
-			.then((response) => {
-				if (response.data.success) {
-					return response.data.history;
-				} else {
-					throw new Error('Failed to get user history');
-				}
-			});
-	});
-
-	return {
-		type: GET_HISTORY,
 		payload: request,
 	};
 }

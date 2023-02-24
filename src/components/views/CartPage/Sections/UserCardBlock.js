@@ -5,7 +5,7 @@ function UserCardBlock(props) {
 	const renderItems = () =>
 		props.products &&
 		props.products.map((product) => (
-			<tr key={product._id}>
+			<tr key={product.productId}>
 				<td>
 					<CloudFrontImage
 						image={product.images[0]}
@@ -17,7 +17,9 @@ function UserCardBlock(props) {
 				<td>{product.quantity}</td>
 				<td>$ {product.price}</td>
 				<td>
-					<button onClick={() => props.removeItem(product._id)}>Remove </button>{' '}
+					<button onClick={() => props.removeItem(product.productId)}>
+						Remove{' '}
+					</button>{' '}
 				</td>
 			</tr>
 		));

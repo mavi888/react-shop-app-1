@@ -70,7 +70,6 @@ export default function (state = {}, action) {
 		case REMOVE_CART_ITEM_USER:
 			return {
 				...state,
-				cartDetail: action.payload.cartDetail,
 				userData: {
 					...state.userData,
 					cart: action.payload.cart,
@@ -84,7 +83,6 @@ export default function (state = {}, action) {
 					...state.userData,
 					cart: action.payload.cart,
 				},
-				cartDetail: action.payload.cartDetail,
 			};
 
 		case PRODUCT_UPLOAD:

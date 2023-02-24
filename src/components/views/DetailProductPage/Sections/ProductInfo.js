@@ -15,12 +15,11 @@ function ProductInfo(props) {
 	const [Product, setProduct] = useState({});
 
 	useEffect(() => {
-		console.log(props.detail);
 		setProduct(props.detail);
 	}, [props.detail]);
 
 	const addToCartHandler = () => {
-		props.addToCart(props.detail._id);
+		props.addToCart(props.detail.productId);
 	};
 
 	return (

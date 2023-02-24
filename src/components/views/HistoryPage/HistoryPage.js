@@ -20,27 +20,9 @@ function HistoryPage() {
 	}, []);
 
 	const formatTime = (time) => {
-		var day = moment(time);
-		if (time !== undefined) {
-			const t = day.format('DD-MM-YYYY');
-			return t;
-		}
-	};
-
-	const calculateTotal = (items) => {
-		let total = 0;
-		items.forEach((item) => {
-			total = total + item.price;
-		});
-		return total;
-	};
-
-	const calculateQuantity = (items) => {
-		let total = 0;
-		items.forEach((item) => {
-			total = total + item.quantity;
-		});
-		return total;
+		const date = new Date(parseInt(time));
+		const formattedDate = date.toDateString();
+		return formattedDate;
 	};
 
 	return (
@@ -62,11 +44,11 @@ function HistoryPage() {
 
 				<tbody>
 					{History.map((item) => (
-						<tr key={item[0].id}>
-							<td>{item[0].paymentId}</td>
-							<td>{calculateTotal(item)}</td>
-							<td>{calculateQuantity(item)}</td>
-							<td>{formatTime(item[0].dateOfPurchase)}</td>
+						<tr key={item.orderId}>
+							<td>{item.orderId}</td>
+							<td>{item.totalPrice}</td>
+							<td>{item.totalQuantity}</td>
+							<td>{formatTime(item.date)}</td>
 						</tr>
 					))}
 				</tbody>

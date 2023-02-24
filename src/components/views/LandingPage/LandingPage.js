@@ -43,7 +43,6 @@ function LandingPage() {
 				if (variables.loadMore) {
 					setProducts([...Products, ...response.payload.products]);
 				} else {
-					setProducts([]);
 					setProducts(response.payload.products);
 				}
 				setPostSize(response.payload.postSize);
@@ -73,7 +72,7 @@ function LandingPage() {
 				<Card
 					hoverable={true}
 					cover={
-						<a href={`/product/${product._id}`}>
+						<a href={`/product/${product.productId}`}>
 							<CloudFrontImage
 								image={product.images[0]}
 								style={{ width: '240px' }}
@@ -107,7 +106,6 @@ function LandingPage() {
 				array = data[key].array;
 			}
 		}
-		console.log('array', array);
 		return array;
 	};
 
