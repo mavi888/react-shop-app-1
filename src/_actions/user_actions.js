@@ -129,10 +129,13 @@ export function logoutUser() {
 	};
 }
 
-export function addToCart(_id) {
+export function addToCart(productId, productTitle, productImage, price) {
 	const request = getAuthorizationHeader().then((config) => {
 		return axios
-			.get(`${SERVER_URL}${STORE_SERVER}/addToCart?productId=${_id}`, config)
+			.get(
+				`${SERVER_URL}${STORE_SERVER}/addToCart?productId=${productId}&productTitle=${productTitle}&productImage=${productImage}&price=${price}`,
+				config
+			)
 			.then((response) => {
 				return response.data;
 			});

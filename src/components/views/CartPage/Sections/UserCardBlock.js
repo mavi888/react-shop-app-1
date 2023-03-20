@@ -8,7 +8,7 @@ function UserCardBlock(props) {
 			<tr key={product.productId}>
 				<td>
 					<CloudFrontImage
-						image={product.images[0]}
+						image={product.images}
 						style={{ width: '70px' }}
 						alt={`product`}
 					/>

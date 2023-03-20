@@ -48,8 +48,8 @@ function DetailProductPage(props) {
 		});
 	}, []);
 
-	const addToCartHandler = (productId) => {
-		dispatch(addToCart(productId));
+	const addToCartHandler = (productId, title, image, price) => {
+		dispatch(addToCart(productId, title, image, price));
 	};
 
 	return (

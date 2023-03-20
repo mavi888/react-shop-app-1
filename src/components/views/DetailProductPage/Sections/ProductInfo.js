@@ -19,7 +19,13 @@ function ProductInfo(props) {
 	}, [props.detail]);
 
 	const addToCartHandler = () => {
-		props.addToCart(props.detail.productId);
+		console.log(props);
+		props.addToCart(
+			props.detail.productId,
+			props.detail.title,
+			props.detail.images[0],
+			props.detail.price
+		);
 	};
 
 	return (
